@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>Vitalfit</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${project.version}</version>
     <name>Vitalfit</name>
     <description>Vitalfit</description>
     <packaging>pom</packaging>
@@ -36,4 +36,7 @@
         </dependency>
     </dependencies>
 
+    <modules>
+        <module>sso</module>
+    </modules>
 </project>
