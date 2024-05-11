@@ -7,9 +7,9 @@ import com.example.sso.exceptions.PersonAlreadyExistsException;
 import com.example.sso.mappers.PersonMapper;
 import com.example.sso.services.PersonService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +19,7 @@ public class PersonController {
     private final PersonService personService;
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
+    @PreAuthorize("permitAll()")
     @PostMapping
     public PersonDto save(@RequestBody RegistrationRequest registrationRequest) throws PersonAlreadyExistsException {
         return personMapper.toDto(personService.save(personMapper.toEntity(registrationRequest)));
