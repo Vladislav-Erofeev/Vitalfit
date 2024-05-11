@@ -22,6 +22,7 @@ public class ProductController {
         return productService.getAll().stream().map(productMapper::toDto).toList();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping
     public ProductDto save(@RequestBody ProductDto productDto) {
         return productMapper.toDto(productService.save(productMapper.toEntity(productDto)));
@@ -32,11 +33,13 @@ public class ProductController {
         return productMapper.toDto(productService.getById(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PatchMapping("/{id}")
     public ProductDto patchById(@PathVariable("id") Long id, @RequestBody ProductDto productDto) {
         return productMapper.toDto(productService.patchById(id, productMapper.toEntity(productDto)));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable("id") Long id) {
         productService.deleteById(id);
