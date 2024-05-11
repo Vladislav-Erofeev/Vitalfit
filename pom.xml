@@ -38,5 +38,6 @@
 
     <modules>
         <module>sso</module>
+        <module>products</module>
     </modules>
 </project>
