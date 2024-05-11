@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,4 +35,7 @@ public class Person {
     private String description;
     @Enumerated(EnumType.STRING)
     private Roles role;
+
+    @OneToMany(mappedBy = "person")
+    private List<Parameter> parameters;
 }

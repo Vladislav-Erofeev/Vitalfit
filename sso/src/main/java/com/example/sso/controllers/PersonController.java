@@ -4,7 +4,9 @@ import com.example.sso.domain.dtos.ErrorResponse;
 import com.example.sso.domain.dtos.PersonDto;
 import com.example.sso.domain.dtos.RegistrationRequest;
 import com.example.sso.exceptions.PersonAlreadyExistsException;
+import com.example.sso.mappers.ParameterMapper;
 import com.example.sso.mappers.PersonMapper;
+import com.example.sso.services.ParameterService;
 import com.example.sso.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class PersonController {
     private final PersonService personService;
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
+    private final ParameterService parameterService;
+    private final ParameterMapper parameterMapper = ParameterMapper.INSTANCE;
 
     @PostMapping
     public PersonDto save(@RequestBody RegistrationRequest registrationRequest) throws PersonAlreadyExistsException {
@@ -28,13 +32,15 @@ public class PersonController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostAuthorize("returnObject.email() == principal.name")
+    @PostAuthorize("returnObject.email == principal.name")
     @GetMapping("/profile")
     public PersonDto getProfile(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
-        return personMapper.toDto(personService.getById(principal.getAttribute("id")));
+        PersonDto personDto = personMapper.toDto(personService.getById(principal.getAttribute("id")));
+        personDto.setParameter(parameterMapper.toDto(parameterService.getLatestByPersonId(personDto.getId())));
+        return personDto;
     }
 
-    @PreAuthorize("isAuthenticated() and #personDto.email() == principal.name")
+    @PreAuthorize("isAuthenticated() and #personDto.email == principal.name")
     @PatchMapping("/profile")
     public PersonDto patchById(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal,
                                @RequestBody PersonDto personDto) {
