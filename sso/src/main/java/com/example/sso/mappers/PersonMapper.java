@@ -14,6 +14,9 @@ public interface PersonMapper {
     @Mapping(source = "birthdate", target = "birthdate", qualifiedByName = "getDateFromString")
     Person toEntity(RegistrationRequest registrationRequest);
 
+    @Mapping(source = "birthdate", target = "birthdate", qualifiedByName = "getDateFromString")
+    Person toEntity(PersonDto personDto);
+
     @Mapping(source = "birthdate", target = "birthdate", qualifiedByName = "getStringFromDate")
     PersonDto toDto(Person person);
 }

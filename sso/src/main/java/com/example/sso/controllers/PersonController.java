@@ -9,7 +9,10 @@ import com.example.sso.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,10 +22,24 @@ public class PersonController {
     private final PersonService personService;
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
-    @PreAuthorize("permitAll()")
     @PostMapping
     public PersonDto save(@RequestBody RegistrationRequest registrationRequest) throws PersonAlreadyExistsException {
         return personMapper.toDto(personService.save(personMapper.toEntity(registrationRequest)));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostAuthorize("returnObject.email() == principal.name")
+    @GetMapping("/profile")
+    public PersonDto getProfile(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
+        return personMapper.toDto(personService.getById(principal.getAttribute("id")));
+    }
+
+    @PreAuthorize("isAuthenticated() and #personDto.email() == principal.name")
+    @PatchMapping("/profile")
+    public PersonDto patchById(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal,
+                               @RequestBody PersonDto personDto) {
+        return personMapper.toDto(personService.patchById(principal.getAttribute("id"),
+                personMapper.toEntity(personDto)));
     }
 
     @ExceptionHandler
