@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: products_route
+          uri: lb://products
+          predicates:
+            - Path=/products/**
+          filters:
+            - StripPrefix=1
+        - id: sso_route
+          uri: lb://sso
+          predicates:
+            - Path=/sso/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8070/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
