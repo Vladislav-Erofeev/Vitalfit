@@ -4,10 +4,10 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: products_route
-          uri: lb://products
+        - id: nutrition_route
+          uri: lb://nutrition
           predicates:
-            - Path=/products/**
+            - Path=/nutrition/**
           filters:
             - StripPrefix=1
         - id: sso_route
