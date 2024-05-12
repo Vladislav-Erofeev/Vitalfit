@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,4 +22,7 @@ public class Exercise {
     private String image;
     private String example;
     private Date modifiedDate;
+
+    @OneToMany(mappedBy = "exercise")
+    private List<Execution> executions;
 }

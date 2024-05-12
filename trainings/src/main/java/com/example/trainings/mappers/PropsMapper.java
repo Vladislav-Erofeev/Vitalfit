@@ -3,6 +3,7 @@ package com.example.trainings.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,5 +14,10 @@ public interface PropsMapper {
     @Named("dateToString")
     static String dateToString(Date date) {
         return simpleDateFormat.get().format(date);
+    }
+
+    @Named("stringToDate")
+    static Date stringToDate(String date) throws ParseException {
+        return simpleDateFormat.get().parse(date);
     }
 }
