@@ -38,4 +38,8 @@ public class ProductService {
     public Product getById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Product not found"));
     }
+
+    public List<Product> getAllByName(String name) {
+        return productRepository.findAllByNameContainingIgnoreCase(name);
+    }
 }

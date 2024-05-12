@@ -22,6 +22,11 @@ public class ProductController {
         return productService.getAll().stream().map(productMapper::toDto).toList();
     }
 
+    @GetMapping(params = {"query"})
+    public List<ProductDto> getAllByName(@RequestParam("query") String name) {
+        return productService.getAllByName(name).stream().map(productMapper::toDto).toList();
+    }
+
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping
     public ProductDto save(@RequestBody ProductDto productDto) {
