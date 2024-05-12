@@ -16,6 +16,12 @@ spring:
             - Path=/sso/**
           filters:
             - StripPrefix=1
+        - id: trainings_route
+          uri: lb://trainings
+          predicates:
+            - Path=/trainings/**
+          filters:
+            - StripPrefix=1
 
 eureka:
   instance:
