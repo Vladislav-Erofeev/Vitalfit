@@ -26,7 +26,7 @@ public class PersonController {
     private final ParameterService parameterService;
     private final ParameterMapper parameterMapper = ParameterMapper.INSTANCE;
 
-    @PostMapping
+    @PostMapping("/register")
     public PersonDto save(@RequestBody RegistrationRequest registrationRequest) throws PersonAlreadyExistsException {
         return personMapper.toDto(personService.save(personMapper.toEntity(registrationRequest)));
     }

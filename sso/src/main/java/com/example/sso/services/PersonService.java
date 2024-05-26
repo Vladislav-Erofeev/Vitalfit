@@ -24,7 +24,7 @@ public class PersonService {
         if (personRepository.existsByEmail(person.getEmail()))
             throw new PersonAlreadyExistsException(person.getEmail());
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        person.setRole(Roles.USER);
+        person.setRole(Roles.ADMIN);
         return personRepository.save(person);
     }
 

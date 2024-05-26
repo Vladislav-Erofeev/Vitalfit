@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+
+  discovery:
+    build: ./discovery
+    ports:
+      - "8070:8070"
+
+  gateway:
+    build: ./gateway
+    env_file: .env
+    ports:
+      - "8080:8080"
+
+  sso:
+    build: ./sso
+    env_file: .env
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+      - discovery
+      - gateway
+
+  products:
+    build: ./products
+    env_file: .env
+    depends_on:
+      - sso
+
+  trainings:
+    build: ./trainings
+    env_file: .env
+    depends_on:
+      - sso
